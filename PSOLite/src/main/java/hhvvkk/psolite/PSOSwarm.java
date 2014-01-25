@@ -1,11 +1,17 @@
 package hhvvkk.psolite;
 
+import java.util.ArrayList;
 
 
-public class PSOSwarm{
+
+public class PSOSwarm extends ArrayList<Particle>{
 	
-	//PARTICLES
-	Particle [] particles;
-	
+	PSOSwarm(int amount){
+		super(amount);
+		
+		for(int i = 0; i < amount; i++){
+			add(new Particle());
+		}
+	}
 	
 }

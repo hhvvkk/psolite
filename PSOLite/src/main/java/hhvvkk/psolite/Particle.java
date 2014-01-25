@@ -9,19 +9,27 @@ public class Particle   {
 	//VELOCITY
 	private double v[];
 	
-	//PERSONAL BEST
+	//PERSONAL BEST(FITNESS) = bestPerformance
 	private double pBest;
 	
-	//FITNESS
+	//FITNESS = Performance
 	private double fitness;
 	
 	Particle(){
-		
+		fitness = 10;
 	}
 	
 	public void setData(double [] xVal, double [] vVal){
 		x = xVal;
 		v = vVal;
+	}
+	
+	/**
+	* Returns the position of the particle in the space
+	* @return Position of particle(x)
+	*/
+	public double []getPosition(){
+		return x;
 	}
 	
 	
@@ -31,18 +39,19 @@ public class Particle   {
 		}
 	}
 	
-	public void updateFitness(){
-		
-	}
 	
-	public void print(){
-		System.out.println("Printing");
-		System.out.println("------------BEGIN");
-		for(int i = 0; i < x.length; i++){
-			System.out.println(x[i]);
-		}
-		System.out.println("-------------END");
+	public void updateFitness(double newValue, boolean maximize){
+		if(maximize == true){
+                    if(fitness > pBest){
+                        fitness = newValue;
+                    }
+                }
+                else{ // minimize
+                    if(fitness > pBest){
+                        fitness = newValue;
+                    }
+                }
+                        
 	}
-	
 	
 }
