@@ -21,6 +21,6 @@ public abstract class PSOFitnessFunction{
 	}
 	
 	//abstract 
-	///@todo make abstract for own imlementations
+	//make abstract for own imlementations
 	public abstract double evaluate(double [] xValue);
 }

@@ -1,8 +1,12 @@
 package hhvvkk.psolite;
 
+import java.util.ArrayList;
+
 
 public class Particle   {
-	
+        
+	private ArrayList<Particle>neighborhood = new ArrayList<Particle>();
+        
 	//POSITION
 	private double x[] = null;
 	
@@ -19,6 +23,24 @@ public class Particle   {
 		fitness = 10;
 	}
 	
+        /**
+         * Adds a neighbor to this particle's neighborhood
+         * @param newNeighbour : The new neighbor to add to this particle neighborhood
+         */
+        public void addNeighbour(Particle newNeighbour){
+                if(newNeighbour == this){
+                        return;
+                        //do not add self
+                }
+                
+                neighborhood.add(newNeighbour);
+        }
+        
+        /**
+         * Sets the particle position values and velocity values
+         * @param xVal : The position values
+         * @param vVal : The velocity values
+         */
 	public void setData(double [] xVal, double [] vVal){
 		x = xVal;
 		v = vVal;
@@ -57,7 +79,7 @@ public class Particle   {
         * @return Return the personal best pBest for the particle
 	*/
         public double getPBest(){
-            return pBest;
+                return pBest;
         }
         
 	/**

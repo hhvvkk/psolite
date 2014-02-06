@@ -10,7 +10,7 @@ public class PSO {
         PSOCloud cloud = null;
         
         //a boolean indicating if the particle is initialised
-        boolean particlesInitialized = false;
+        boolean psoInitialized = false;
         
 	//the maximum number of iterations before stopping
 	int maxIterations = 100;
@@ -25,7 +25,7 @@ public class PSO {
 	PSOFitnessFunction psoFitnessFunction = null;
         
         //the fitnessfunction that will be used in evaluating the fitness of a particle
-	PSOUpdateFunction psoUpdateFunction = null;
+	PSOCreateNeighbourhood psoUpdateFunction = null;
 	
 	//a boolean indicating whether it should be maximum or minimum obtained by fitness function
 	boolean maximise = true;
@@ -146,28 +146,16 @@ public class PSO {
                 return cloud.cloudIsInitialised();
         }
 	
-        
-	/**
-	*
-	*/
         /**
-         * A function to step the particle positions and evaluate them n amount of times
-         * @param cloudSize : The amount of swarms in the cloud
+         * Initialize the particles with the given amount of space
          * @param swarmSize : The amount of particles per swarm in the cloud
          * @param particleDimension : The amount of dimensions per particle(amount of values)
 	 * @param xMaxs : the maximum value per x value that can be taken(I.e. the search space)
          * @param xMinx : the minimum value per x value that can be taken(I.e. the search space)
          */
-	public void initializePSO(int particleDimension, int cloudSize, int swarmSize, double []xMaxs, double []xMins){
-                cloud = new PSOCloud(cloudSize, swarmSize);
-                if(particleDimension != xMaxs.length || particleDimension != xMins.length){ 
-                        //throw error
-                }
+	public void initializePSO(int particleDimension, int swarmSize, double []xMaxs, double []xMins){
+                psoInitialized = true;
                 
-                cloud.initializeCloud(particleDimension, xMaxs, xMins);
                 
-		maxIterations = maxIter;
-                initializeSwarm(swarmSize, xMaxs, xMins);
-                particlesInitialized = true;
 	}
 }
