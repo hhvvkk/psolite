@@ -4,10 +4,10 @@ package hhvvkk.psolite;
 public class Particle   {
 	
 	//POSITION
-	private double x[];
+	private double x[] = null;
 	
 	//VELOCITY
-	private double v[];
+	private double v[] = null;
 	
 	//PERSONAL BEST(FITNESS) = bestPerformance
 	private double pBest;

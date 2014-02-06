@@ -4,9 +4,10 @@ package hhvvkk.psolite;
 import java.util.Random;
 
 public class PSO {
-	
-	//an arraylist of particles
-	PSOSwarm swarm = null;
+	boolean swarmsInitialized = false;
+        
+        //A few swarms contained in this cloud
+        PSOCloud cloud = null;
         
         //a boolean indicating if the particle is initialised
         boolean particlesInitialized = false;
@@ -34,14 +35,36 @@ public class PSO {
 	
 	PSO(PSOFitnessFunction fFunciton){
                 //if fitnessfunction == null throw
-		psoFitnessFunction  = fFunciton;
-		swarm = new PSOSwarm(100);		
+		psoFitnessFunction  = fFunciton;                
 	}
+        
+        /**
+         * Set the amount of iterations the pso will run
+         * @param iterationsAmount : The amount of iterations to set it to
+         */
+        public void setMaxIteration(int iterationsAmount){
+                maxIterations = iterationsAmount;
+        }
+        
+        /**
+         * Get the maximum amount of iterations 
+         * @return Return the maximum amount of iterations the PSO will run
+         */
+        public int getMaxIterations(){
+                return maxIterations;
+        }
+        
+        /**
+         * Get the current iteration count for the PSO
+         * @return Returns the current iteration count
+         */
+        public int getCurrentIteration(){
+                return currentIteration;
+        }
 	
-	/**
-	* A function to run the PSO until it has finished or found a solution
-	*
-	*/
+        /**
+         * A function to run the PSO until it has finished or found a solution
+         */
 	public void runPSO(){
 		//inside
                 while(!isEnd()){
@@ -72,19 +95,28 @@ public class PSO {
 	*/
 	public void stepPSO(){//throws...
                 //check if swarm is initialilsed
-		if(!isInitialised()){
+		if(!cloudIsIntialized()){
 			//throw error, must be initialized
 		}
                 
-                //move all particles 
-                for(int i = 0; i < swarm.size(); i++){
-                    Particle p = swarm.get(i);
-                    p.move();
+                for(int cloudCount = 0; cloudCount < cloud.getCloudSize(); cloudCount++){
+                        //move all particles 
+                        for(int particleCount = 0; particleCount < cloud.getSwarmSize(); particleCount++ ){
+                                Particle particle = cloud.getParticle(cloudCount, particleCount);
+                                
+                                //move particle
+                                particle.move();                                
+                        }
                 }
                 
-                //change velocity of particles
-                for(int i =0; i < swarm.size(); i++){
-                    
+                for(int cloudCount = 0; cloudCount < cloud.getCloudSize(); cloudCount++){
+                        //move all particles 
+                        for(int particleCount = 0; particleCount < cloud.getSwarmSize(); particleCount++ ){
+                                Particle particle = cloud.getParticle(cloudCount, particleCount);
+                                
+                                //change velocity of particles
+                                
+                        }
                 }
 	}
 	
@@ -96,7 +128,9 @@ public class PSO {
 	
 	public boolean isEnd(){
                 //check for fitness is finished
-                    
+                
+            
+                //check for iteration done
 		if(currentIteration >= maxIterations)
 			return true;
 		else 
@@ -104,58 +138,36 @@ public class PSO {
 	}
 	
 	
-	private boolean isInitialised(){
-		return false;
-	}
-	
+        /**
+         * Check whether the cloud is initialized and returns true if it is
+         * @return Return true if cloud is initialized
+         */
+        public boolean cloudIsIntialized(){
+                return cloud.cloudIsInitialised();
+        }
 	
         
 	/**
-	* A function to step the particle positions and evaluate them n amount of times
-	* @param xMaxs : the maximum value per x value that can be taken(I.e. the search space)
-        * @param xMinx : the minimum value per x value that can be taken(I.e. the search space)
 	*
 	*/
-	public void initialisePSO(int particleDimension, int swarmSize, int maxIter, double []xMaxs, double []xMins){
+        /**
+         * A function to step the particle positions and evaluate them n amount of times
+         * @param cloudSize : The amount of swarms in the cloud
+         * @param swarmSize : The amount of particles per swarm in the cloud
+         * @param particleDimension : The amount of dimensions per particle(amount of values)
+	 * @param xMaxs : the maximum value per x value that can be taken(I.e. the search space)
+         * @param xMinx : the minimum value per x value that can be taken(I.e. the search space)
+         */
+	public void initializePSO(int particleDimension, int cloudSize, int swarmSize, double []xMaxs, double []xMins){
+                cloud = new PSOCloud(cloudSize, swarmSize);
                 if(particleDimension != xMaxs.length || particleDimension != xMins.length){ 
                         //throw error
                 }
                 
+                cloud.initializeCloud(particleDimension, xMaxs, xMins);
+                
 		maxIterations = maxIter;
                 initializeSwarm(swarmSize, xMaxs, xMins);
                 particlesInitialized = true;
-	}
-	
-	
-	private void initializeSwarm(int swarmSize, double []xMaxs, double[] xMins){		
-                //create a new swarm
-		swarm = new PSOSwarm(swarmSize);
-                
-                //loop through the swarm and initialize random values for each particle
-                for(int i = 0; i < swarm.size(); i++){
-                                
-                        //the position values
-                        double [] xValues = new double[dimension];                        
-                        
-                        for(int xCount = 0; xCount < dimension; xCount++){
-                                //make use of the maximum and minimum values for each x 
-                                //value to generate random values
-                                //the random x value...
-                                double newXValue = r.nextDouble() * (xMaxs[xCount] - xMins[xCount]) + xMins[i];
-                                xValues[xCount] = newXValue;
-                        }
-                        
-                        //the velocity values per each dimension set to zero
-                        double [] vValues = new double[dimension];
-                        for(int vCount = 0; vCount < dimension; vCount++){
-                                //initialize to zero velocity
-                                vValues[vCount] = 0;
-                        }
-                        
-                        Particle p = swarm.get(i);
-                        
-                        //set the particle values
-                        p.setData(xValues, vValues);
-                }
 	}
 }

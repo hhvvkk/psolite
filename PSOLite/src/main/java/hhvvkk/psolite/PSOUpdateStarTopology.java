@@ -39,5 +39,13 @@ public class PSOUpdateStarTopology extends PSOUpdateFunction{
                         }
                 }
                 
+                //after you've found the best particle you use it to update the velocities of all the particles
+                for(int i = 0; i < swarm.size(); i++){
+                        Particle currentParticle = swarm.get(i);
+                        
+                        
+                }
+                
+                
         }
 }
