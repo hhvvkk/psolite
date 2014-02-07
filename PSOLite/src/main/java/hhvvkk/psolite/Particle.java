@@ -37,6 +37,14 @@ public class Particle   {
         }
         
         /**
+         * Removes a particle from the neighborhood
+         * @param aParticle A particle to be removed
+         */
+        public void removeNeighbour(Particle aParticle){
+                neighborhood.remove(aParticle);
+        }
+        
+        /**
          * Sets the particle position values and velocity values
          * @param xVal : The position values
          * @param vVal : The velocity values
