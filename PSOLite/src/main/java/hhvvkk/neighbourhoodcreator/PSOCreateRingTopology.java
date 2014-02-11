@@ -1,38 +1,54 @@
 
 package hhvvkk.neighbourhoodcreator;
 
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class PSOCreateRingTopology extends PSOCreateNeighbourhood{
         /**
-         * Creates a string to represent a star topology for the specific amount of particles
-         * @return Return a string representation for the particles and neighbors
+         * Create an array list for a representation for specific particles
+         * @return Return an array list representation for the particles and neighbors
          */
-        public String create(int amountOfParticles){
-                String swarmRepresentation = "";
+        public ArrayList<LinkedList<Integer>> create(int amountOfParticles){
+                if(amountOfParticles <= 0){
+                        return new ArrayList<LinkedList<Integer>>();
+                }
                 
-                //create the neighborhood for each particle
-                for(int i = 0; i < amountOfParticles; i++){
-                        //each particle is connected to the next or previous
-                        String newParticle = Integer.toString(i) + ":";
-                    
-                        //get previous(or jump to end)
-                        int previous = i -1;
-                        
-                        if(previous < 0){//which means the previous is the last
-                                previous = amountOfParticles -1;
-                        }
+                
+                ArrayList<LinkedList<Integer>> particles = new ArrayList<LinkedList<Integer>>();
+                //for all particles
+                for(int pCount = 0; pCount < amountOfParticles; pCount++){
+                        LinkedList<Integer> neighbourhood = new LinkedList();
+                        //Each particle is connected to the previous or the next
                         
                         
-                        //get next or jump to beginning
-                        int next = i +1;
+                        //connect neighbour to the next 
+                        int next = pCount + 1;
+                        
+                        //next should be in set
                         if(next >= amountOfParticles){
                                 next = 0;
                         }
+                        neighbourhood.add(next);
                         
-                        newParticle = Integer.toString(previous)+ "," + Integer.toString(next);
-                        swarmRepresentation = swarmRepresentation + newParticle + "\n\r";
+                        
+                        //connect neighbour to the previous
+                        int previous = pCount - 1;
+                        
+                        //next should be in set
+                        if(previous <= -1){
+                                previous = amountOfParticles -1;
+                        }
+                        
+                        //it can happen that previous is next(number of particles is 2)
+                        if(previous != next)
+                                neighbourhood.add(previous);
+                        
+                        particles.add(neighbourhood);
                 }
                 
-                return swarmRepresentation;
+                return particles;
         }
 
 }

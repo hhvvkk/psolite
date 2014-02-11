@@ -62,6 +62,24 @@ public class NeighbourhoodUtility {
                 if(particles == null)
                         return null;
                 
-                return new ArrayList<LinkedList<Integer>>(particles);
+                //have to do manual copy...since the copyconstructor copies shallow 
+                //and not depth
+                ArrayList<LinkedList<Integer>> returnLinkedList = new ArrayList<LinkedList<Integer>>();
+                
+                //loop through the arraylist   (((PARTICLE)))
+                for(int aCount = 0; aCount < particles.size(); aCount++){
+                        //loop through each linkedlist in the arraylist (((NEIGHBOUR OF PARTICLE)))
+                        LinkedList<Integer> newLinkedList = new LinkedList<Integer>();
+                        for(int lCount = 0; lCount < particles.get(aCount).size(); lCount++){
+                                //basically get each PARTICLE >>> NEIGHBOUR OF PARTICLE
+                                //and add them to the newLinkedlist
+                                newLinkedList.add(particles.get(aCount).get(lCount));
+                        }
+                        
+                        //add the created linkedlist to the array
+                        returnLinkedList.add(newLinkedList);
+                }
+                    
+                return returnLinkedList;
         }
 }
