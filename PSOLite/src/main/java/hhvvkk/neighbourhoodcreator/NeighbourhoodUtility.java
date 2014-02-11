@@ -36,6 +36,22 @@ public class NeighbourhoodUtility {
                 return particles.size();
         }
         
+        
+        /**
+         * Set the amount of particles and creates a new swarm representation
+         * @param newSize : The new swarm size
+         */
+        public void setSize(int newSize) throws IndexOutOfBoundsException{
+                if(newSize <= -1)
+                        throw new IndexOutOfBoundsException("The amount of particles must be a positive integer for the neighborhood utility");
+                particles = new ArrayList<LinkedList<Integer>>(newSize);
+                
+                for(int i = 0; i < newSize; i++){
+                        //add all particles with no neighbors initially
+                        particles.add(new LinkedList<Integer>());
+                }
+        }
+        
         /**
          * Adds a particle as a neighbor of another particle
          * @param particleIndex
