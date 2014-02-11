@@ -1,13 +1,6 @@
 package hhvvkk.psolite;
 
-public abstract class PSOFitnessFunction{
-	
-	
-	PSOFitnessFunction(){
-		
-	}
-	
-	
+public abstract class PSOFitnessFunction{	
 	
 	/**
 	* @param particle : Particle to be evaluated
@@ -15,7 +8,13 @@ public abstract class PSOFitnessFunction{
 	*/
 	public double evaluate(Particle particle, boolean maximize) {
 		double []position = particle.getPosition();
-		double fitness = evaluate(position);
+                double fitness = 0;
+                try{
+                        fitness = evaluate(position);
+                }catch(Exception e){
+                    
+                }
+		
 		particle.updateFitness(fitness, maximize);
 		return fitness;
 	}

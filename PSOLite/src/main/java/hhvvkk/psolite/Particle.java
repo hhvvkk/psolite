@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Particle   {
         
-	private ArrayList<Particle>neighborhood = new ArrayList<Particle>();
+	private ArrayList<Integer>neighborhood = new ArrayList<Integer>();
         
 	//POSITION
 	private double x[] = null;
@@ -15,6 +15,9 @@ public class Particle   {
 	
 	//PERSONAL BEST(FITNESS) = bestPerformance
 	private double pBest;
+        
+        //PERSONAL BEST(POSITION)
+        private double xPbest[] = null;
 	
 	//FITNESS = Performance
 	private double fitness;
@@ -24,24 +27,27 @@ public class Particle   {
 	}
 	
         /**
-         * Adds a neighbor to this particle's neighborhood
-         * @param newNeighbour : The new neighbor to add to this particle neighborhood
+         * Adds a neighbor to this particle's neighborhood using the index supplied
+         * @param newNeighbourIndex : The new neighbor index to add to this particle neighborhood
          */
-        public void addNeighbour(Particle newNeighbour){
-                if(newNeighbour == this){
-                        return;
-                        //do not add self
+        public void addNeighbour(int newNeighbourIndex) throws IndexOutOfBoundsException{
+                if(newNeighbourIndex < 0){
+                        throw new IndexOutOfBoundsException("Adding a particle index must be within bounds ("+Integer.toString(newNeighbourIndex) +"");
                 }
                 
-                neighborhood.add(newNeighbour);
+                //simply do not add something twice
+                if(neighborhood.contains(newNeighbourIndex))
+                        return;
+                
+                neighborhood.add(newNeighbourIndex);
         }
         
         /**
          * Removes a particle from the neighborhood
-         * @param aParticle A particle to be removed
+         * @param particleIndex : A particle index to be removed
          */
-        public void removeNeighbour(Particle aParticle){
-                neighborhood.remove(aParticle);
+        public void removeNeighbour(int particleIndex){
+                neighborhood.remove(particleIndex);
         }
         
         /**
@@ -59,7 +65,23 @@ public class Particle   {
 	* @return Position of particle(x)
 	*/
 	public double []getPosition(){
-		return x;
+                double [] tempPosition = new double[x.length];
+                
+                System.arraycopy(x, 0, tempPosition, 0, tempPosition.length);
+                
+		return tempPosition;
+	}
+        
+        /**
+         * Gets the best position the particle was in at a previous stage
+         * @return Return the double array of the best position of the particle
+         */
+        public double []getBestPosition(){
+		double [] tempPosition = new double[xPbest.length];
+                
+                System.arraycopy(xPbest, 0, tempPosition, 0, tempPosition.length);
+                
+		return tempPosition;
 	}
 	
 	/**

@@ -30,13 +30,25 @@ public class PSO {
         //A random generator
 	Random r = new Random();
 	
-	PSO(PSOFitnessFunction fFunciton){
-                //if fitnessfunction == null throw
+        /**
+         * Create a particle swarm optimizer with a swarm already created
+         * @param fFunciton : A fitness function to evaluate the fitness of particles
+         * @param maxToFind : A boolean which determines if fitness should strive towards maximum
+         */
+	PSO(PSOSwarm newSwarm, PSOFitnessFunction fFunciton, boolean maxToFind){
+                if(newSwarm == null)
+                        throw new NullPointerException("Swarm is null in the construction of PSO");
+                else 
+                        swarm = newSwarm;
+                
+                if(fFunciton == null)
+                        throw new NullPointerException("Fitness function is null in construction of PSO");
+                
 		psoFitnessFunction  = fFunciton;                
 	}
         
         /**
-         * Set the amount of iterations the pso will run
+         * Set the amount of iterations the PSO will run
          * @param iterationsAmount : The amount of iterations to set it to
          */
         public void setMaxIteration(int iterationsAmount){
@@ -106,7 +118,7 @@ public class PSO {
                 for(int swarmCount = 0; swarmCount < swarm.size(); swarmCount++){
                         Particle particle = swarm.get(swarmCount);
                         //update particle fitness
-                        
+                        psoFitnessFunction.evaluate(particle, maximise);
                 }
                 
                 for(int swarmCount = 0; swarmCount < swarm.size(); swarmCount++){
@@ -143,16 +155,21 @@ public class PSO {
         }
 	
         /**
-         * Initialize the particles with the given amount of space
-         * @param swarmSize : The amount of particles per swarm in the cloud
+         * Initialize the particles with the given amount of space(dimension sizes - maximum and minimum values)
          * @param particleDimension : The amount of dimensions per particle(amount of values)
 	 * @param xMaxs : the maximum value per x value that can be taken(I.e. the search space)
          * @param xMinx : the minimum value per x value that can be taken(I.e. the search space)
          */
-	public void initializePSO(int particleDimension, int swarmSize, double []xMaxs, double []xMins){
+	public void initializePSO(int particleDimension, double []xMaxs, double []xMins){
+                
+                //swarm must exist and not be null
+                if(swarm == null)
+                        throw new NullPointerException("Swarm non existent in initialization of PSO");
+                
+                currentIteration = 0;
+                dimension = particleDimension;
                 psoInitialized = true;
                 
-                swarm = new PSOSwarm(swarmSize);
                 
                 //loop through the swarm and initialize random values for each particle
                 for(int i = 0; i < swarm.size(); i++){
