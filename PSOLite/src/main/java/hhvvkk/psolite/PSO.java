@@ -25,7 +25,7 @@ public class PSO {
 	PSOFitnessFunction psoFitnessFunction = null;
 	
 	//a boolean indicating whether it should be maximum or minimum obtained by fitness function
-	boolean maximise = true;
+	boolean maximize = true;
         
         //A random generator
 	Random r = new Random();
@@ -61,6 +61,27 @@ public class PSO {
          */
         public int getMaxIterations(){
                 return maxIterations;
+        }
+        
+        /**
+         * Sets the c1 value for each and every particle(The influence of self)
+         * @param c1 : The c1 value for particle
+         */
+        public void setC1(double c1){
+                for(int i = 0; i < swarm.size(); i++){
+                        swarm.get(i).setC1(c1);
+                }
+        }
+        
+        
+        /**
+         * Sets the c1 value for each and every particle(The influence of neighbors)
+         * @param c2 : The c2 value for particle
+         */
+        public void setC2(double c2){
+                for(int i = 0; i < swarm.size(); i++){
+                        swarm.get(i).setC2(c2);
+                }
         }
         
         /**
@@ -128,13 +149,13 @@ public class PSO {
                 for(int swarmCount = 0; swarmCount < swarm.size(); swarmCount++){
                         Particle particle = swarm.get(swarmCount);
                         //update particle fitness
-                        psoFitnessFunction.evaluate(particle, maximise);
+                        psoFitnessFunction.evaluate(particle, maximize);
                 }
                 
                 for(int swarmCount = 0; swarmCount < swarm.size(); swarmCount++){
                         Particle particle = swarm.get(swarmCount);
                         //update particle velocity
-                        
+                        particle.updateVelocity(swarm, maximize);
                 }
 	}
 	
