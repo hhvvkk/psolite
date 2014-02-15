@@ -13,9 +13,17 @@ public class Particle   {
         
         //C1 - OWN VALUES
         double c1 = 1.4;
+        double c1MinValue = 0.5;//The value c1 will be reduced to if it is reduced
         
         //C2 - NEIGHBORHOOD VALUES
         double c2 = 1.4;
+        double c2MinValue = 0.5;//The value c2 will be reduced to if it is reduced
+        
+        //A DOUBLE USED TO REDUCE THE C1 VALUE
+        double reduceC1Value = 0;
+        
+        //A DOUBLE USED TO REDUCE THE C2 VALUE
+        double reduceC2Value = 0;
         
         
 	//POSITION
@@ -35,6 +43,8 @@ public class Particle   {
         
         //RANDOM for updating velocity
         Random r = new Random();
+        
+        boolean reduceC1C2Values = false;
 	
 	Particle(){
 		fitness = 10;
@@ -79,6 +89,21 @@ public class Particle   {
          */
         public void setC2(double newC2){
                 c2 = newC2;
+        }
+        
+        /**
+         * A function to set the amount of steps must be taken to reach the minimum c1 value and minimum c2 value
+         * @param amountSteps : The amount of steps before minimum reached
+         * @param minimumC1Value : the minimum value for c1
+         * @param minimumC2Value : the minimum value for c2
+         */
+        public void setReductionAmount(int amountSteps, double minimumC1Value, double minimumC2Value){
+                //asdasf
+           // asfasfcalculate amount
+                c1MinValue = minimumC1Value;
+                c2MinValue = minimumC2Value;
+                
+                
         }
         
         /**
@@ -175,7 +200,29 @@ public class Particle   {
                         v[i] = newVelocity;
                 }
                 
+                //finally check if the c1 & c2 values needs to change(It can be changed over time)
+                if(reduceC1C2Values){
+                        reduceTheC1C2Values();
+                }
                 
+        }
+        
+        /**
+         * A function to reduce the values of c1 and c2 in order to try and ensure convergence of the particles
+         */        
+        private void reduceTheC1C2Values(){
+                //reduce values
+                c1 = c1 - reduceC1Value;
+                if(c1 < c1MinValue){
+                        reduceC1C2Values = false;
+                        c1 = c1MinValue;
+                }
+                
+                c2 = c2 - reduceC2Value;
+                if(c2 < c2MinValue){
+                        reduceC1C2Values = false;
+                        c2 = c2MinValue;
+                }
         }
         
         
