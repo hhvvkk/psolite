@@ -120,16 +120,31 @@ public class Particle   {
 	public void updateFitness(double newValue, boolean maximize){
                 fitness = newValue;
 		if(maximize == true){
-                    if(fitness > pBest){
-                        pBest = newValue;
-                    }
+                        if(fitness > pBest){
+                            pBest = newValue;
+                            xPbest = copyDouble(x);
+                        }
                 }
                 else{ // minimize
-                    if(fitness < pBest){
-                        pBest = newValue;
-                    }
+                        if(fitness < pBest){
+                            pBest = newValue;
+                            xPbest = copyDouble(x);
+                        }
                 }
                         
 	}
+        
+        /**
+         * Copy a double array to a new array
+         * @param valueToCopy The double array you want a new array of
+         * @return Returns a new array of doubles with same values as the parameter value array
+         */
+        private double [] copyDouble(double []valueToCopy){
+                double []doubleDuplicateInator = new double[valueToCopy.length];
+                
+                System.arraycopy(valueToCopy, 0, doubleDuplicateInator, 0, valueToCopy.length);
+                
+                return doubleDuplicateInator;
+        }
 	
 }

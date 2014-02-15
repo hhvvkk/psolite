@@ -35,7 +35,7 @@ public class PSO {
          * @param fFunciton : A fitness function to evaluate the fitness of particles
          * @param maxToFind : A boolean which determines if fitness should strive towards maximum
          */
-	PSO(PSOSwarm newSwarm, PSOFitnessFunction fFunciton, boolean maxToFind){
+	public PSO(PSOSwarm newSwarm, PSOFitnessFunction fFunciton, boolean maxToFind){
                 if(newSwarm == null)
                         throw new NullPointerException("Swarm is null in the construction of PSO");
                 else 
@@ -80,6 +80,16 @@ public class PSO {
                     stepPSO();
                 }
 	}
+        
+        /**
+         * Set the fitness function to the new fitness function
+         * @param newFitnessFunction The new fitness function to use
+         */
+        public void setFitnessFunction(PSOFitnessFunction newFitnessFunction){
+                if(newFitnessFunction == null)
+                            throw new NullPointerException("The new fitness function to set is null");
+                psoFitnessFunction = newFitnessFunction;
+        }
 	
         
         /**
@@ -179,7 +189,7 @@ public class PSO {
                                 //make use of the maximum and minimum values for each x 
                                 //value to generate random values
                                 //the random x value...
-                                double newXValue = r.nextDouble() * (xMaxs[xCount] - xMins[xCount]) + xMins[i];
+                                double newXValue = r.nextDouble() * (xMaxs[xCount] - xMins[xCount]) + xMins[xCount];
                                 xValues[xCount] = newXValue;
                         }
                         
@@ -196,7 +206,24 @@ public class PSO {
                         //set the particle values
                         p.setData(xValues, vValues);
                 }
-                        
-                
 	}
+        
+        /**
+         * Gets the particle as it currently is
+         * @return Return the selected particle position
+         */
+        public double[] getParticlePostion(int index){
+                if(index >= swarm.size() || index < 0)
+                        throw new IndexOutOfBoundsException("Index does not exist in get particle position("+Integer.toString(index));
+                
+                return swarm.get(index).getPosition();
+        }
+        
+        /**
+         * Gets the amount of particles in a swarm
+         * @return Return the amount of particles contained in the swarm
+         */
+        public int getSwarmCount(){
+                return swarm.size();
+        }
 }
