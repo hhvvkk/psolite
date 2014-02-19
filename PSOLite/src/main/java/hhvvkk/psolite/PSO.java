@@ -35,7 +35,8 @@ public class PSO {
          * @param fFunciton : A fitness function to evaluate the fitness of particles
          * @param maxToFind : A boolean which determines if fitness should strive towards maximum
          */
-	public PSO(PSOSwarm newSwarm, PSOFitnessFunction fFunciton, boolean maxToFind){
+	public PSO(PSOSwarm newSwarm, PSOFitnessFunction fFunciton, boolean maximisePSO){
+                maximize = maximisePSO;
                 if(newSwarm == null)
                         throw new NullPointerException("Swarm is null in the construction of PSO");
                 else 
@@ -61,27 +62,6 @@ public class PSO {
          */
         public int getMaxIterations(){
                 return maxIterations;
-        }
-        
-        /**
-         * Sets the c1 value for each and every particle(The influence of self)
-         * @param c1 : The c1 value for particle
-         */
-        public void setC1(double c1){
-                for(int i = 0; i < swarm.size(); i++){
-                        swarm.get(i).setC1(c1);
-                }
-        }
-        
-        
-        /**
-         * Sets the c1 value for each and every particle(The influence of neighbors)
-         * @param c2 : The c2 value for particle
-         */
-        public void setC2(double c2){
-                for(int i = 0; i < swarm.size(); i++){
-                        swarm.get(i).setC2(c2);
-                }
         }
         
         /**

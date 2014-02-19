@@ -9,22 +9,13 @@ public class Particle   {
 	private ArrayList<Integer>neighborhood = new ArrayList<Integer>();
         
         //INNERTIA WEIGHT
-        double inertiaWeight = 0.72;
+        double w = 0.72;
         
         //C1 - OWN VALUES
         double c1 = 1.4;
-        double c1MinValue = 0.5;//The value c1 will be reduced to if it is reduced
         
         //C2 - NEIGHBORHOOD VALUES
         double c2 = 1.4;
-        double c2MinValue = 0.5;//The value c2 will be reduced to if it is reduced
-        
-        //A DOUBLE USED TO REDUCE THE C1 VALUE
-        double reduceC1Value = 0;
-        
-        //A DOUBLE USED TO REDUCE THE C2 VALUE
-        double reduceC2Value = 0;
-        
         
 	//POSITION
 	private double x[] = null;
@@ -71,39 +62,11 @@ public class Particle   {
          * @param newInertia : The new inertia weight
          */
         public void setInertiaWeight(double newInertia){
-                inertiaWeight = newInertia;
+                w = newInertia;
         }
         
-        /**
-         * Sets the c1 value(The amount of influence old values has)
-         * @param newC1 : The new c1 value
-         */
-        public void setC1(double newC1){
-                c1 = newC1;
-        }
-        
-        
-        /**
-         * Sets the c2 value(The amount of influence neighborhood values has)
-         * @param newC2 : The new c2 value
-         */
-        public void setC2(double newC2){
-                c2 = newC2;
-        }
-        
-        /**
-         * A function to set the amount of steps must be taken to reach the minimum c1 value and minimum c2 value
-         * @param amountSteps : The amount of steps before minimum reached
-         * @param minimumC1Value : the minimum value for c1
-         * @param minimumC2Value : the minimum value for c2
-         */
-        public void setReductionAmount(int amountSteps, double minimumC1Value, double minimumC2Value){
-                //asdasf
-           // asfasfcalculate amount
-                c1MinValue = minimumC1Value;
-                c2MinValue = minimumC2Value;
-                
-                
+        public double getW(){
+                return w;
         }
         
         /**
@@ -150,7 +113,7 @@ public class Particle   {
                     
                         for(int i = 0; i < x.length; i++){
                                 double r1 = 0.1+r.nextDouble()*0.8;
-                                double newVelocity = inertiaWeight*v[i] + r1*c1*(xPbest[i] - x[i]);
+                                double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]);
                                 v[i] = newVelocity;
                         }
                         return;
@@ -163,66 +126,45 @@ public class Particle   {
                 boolean justStarted = true;
                 double currentBest = 0;
                 
+                
                 //find the best in the neighborhood
-                for(int i = 0; i < neighborhood.size(); i++){
+                for(int i = 1; i < neighborhood.size(); i++){
                         int neighbourIndex = neighborhood.get(i);
                         
                         Particle neighbour = swarm.get(neighbourIndex);
                         
                         if(justStarted == true){
+                                //need to set the first particle as the neighborhood best
                                 currentBest = neighbour.getPBest();
                                 neighbourhoodBestX = neighbour.getBestPosition();
+                                justStarted = false;
                         }
                         else{//if it has started check previous with next
-                                //check to see if the new value is better
-                                if(maximize == true){
-                                        if(currentBest > neighbour.getPBest()){
-                                                currentBest = neighbour.getPBest();
-                                                neighbourhoodBestX = neighbour.getBestPosition();                                                
-                                        }
-                                }
-                                else{ // minimize
-                                        if(currentBest < neighbour.getPBest()){
-                                                currentBest = neighbour.getPBest();
-                                                neighbourhoodBestX = neighbour.getBestPosition();                                                
-                                        }
-                                }
+                                if(isBetterFitness(maximize, currentBest, neighbour.getPBest())){
+                                        System.out.println("Is better " + currentBest + "---" + neighbour.getPBest());
+                                        currentBest = neighbour.getPBest();
+                                        neighbourhoodBestX = neighbour.getBestPosition();  
+                                }//else it is not better 
+                                
                         }
                 }
                 
                 if(neighbourhoodBestX == null)
                         return;
                 
+                //finally check if this particle is better(i.e. this is the best particle in the neighbourhood)
+                if(isBetterFitness(maximize, this.getPBest(), currentBest)){
+                        neighbourhoodBestX = this.getBestPosition();   
+                }
+                
+                
                 for(int i = 0; i < x.length; i++){
                         double r1 = 0.1+r.nextDouble()*0.8;
                         double r2 = 0.1+r.nextDouble()*0.8;
-                        double newVelocity = inertiaWeight*v[i] + r1*c1*(xPbest[i] - x[i]) + r2*c2*(neighbourhoodBestX[i] - x[i]);
+                        double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]) + r2*c2*(neighbourhoodBestX[i] - x[i]);
                         v[i] = newVelocity;
                 }
                 
-                //finally check if the c1 & c2 values needs to change(It can be changed over time)
-                if(reduceC1C2Values){
-                        reduceTheC1C2Values();
-                }
-                
-        }
-        
-        /**
-         * A function to reduce the values of c1 and c2 in order to try and ensure convergence of the particles
-         */        
-        private void reduceTheC1C2Values(){
-                //reduce values
-                c1 = c1 - reduceC1Value;
-                if(c1 < c1MinValue){
-                        reduceC1C2Values = false;
-                        c1 = c1MinValue;
-                }
-                
-                c2 = c2 - reduceC2Value;
-                if(c2 < c2MinValue){
-                        reduceC1C2Values = false;
-                        c2 = c2MinValue;
-                }
         }
         
         
@@ -231,6 +173,11 @@ public class Particle   {
          * @return Return the double array of the best position of the particle
          */
         public double []getBestPosition(){
+                if(xPbest == null){
+                        pBest = fitness;
+                        xPbest = getPosition();
+                }
+                        
 		double [] tempPosition = new double[xPbest.length];
                 
                 System.arraycopy(xPbest, 0, tempPosition, 0, tempPosition.length);
@@ -272,6 +219,14 @@ public class Particle   {
         * @param maximize : A boolean indicating whether the particle strive towards maximum fitness or minimum fitness
 	*/
 	public void updateFitness(double newValue, boolean maximize){
+                //if it has no assigned fitness then just assign it
+                if(xPbest == null){
+                        fitness = newValue;
+                        xPbest = getPosition();
+                        return;
+                }
+                //otherwise find out if it is better
+                
                 fitness = newValue;
 		if(maximize == true){
                         if(fitness > pBest){
@@ -298,6 +253,29 @@ public class Particle   {
                 System.arraycopy(valueToCopy, 0, doubleDuplicateInator, 0, valueToCopy.length);
                 
                 return doubleDuplicateInator;
+        }
+        
+        /**
+         * Determine whether a fitness(firstFitness) is better than another(compareFitness)
+         * @param maximize Determines whether a maximum value need to be obtained
+         * @param firstFitness : The first fitness to compare to the other fitness
+         * @param compareFitness : The fitness to compare the firstFitness to
+         * @return Return true if the firstFitness is better than compareFitness
+         */
+        private boolean isBetterFitness(boolean maximize, double firstFitness, double compareFitness){
+                //check to see if the new value is better
+                if(maximize == true){
+                        if(firstFitness > compareFitness){
+                                return true;
+                        }
+                        return false;
+                }
+                else{ // minimize
+                        if(firstFitness < compareFitness){
+                                return true;
+                        }
+                        return false;
+                }
         }
 	
 }
