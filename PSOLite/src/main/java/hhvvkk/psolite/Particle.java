@@ -34,8 +34,6 @@ public class Particle   {
         
         //RANDOM for updating velocity
         Random r = new Random();
-        
-        boolean reduceC1C2Values = false;
 	
 	Particle(){
 		fitness = 10;
