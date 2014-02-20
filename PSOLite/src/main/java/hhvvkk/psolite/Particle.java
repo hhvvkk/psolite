@@ -1,5 +1,6 @@
 package hhvvkk.psolite;
 
+import hhvvkk.velocityclamp.VelocityClamper;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -34,6 +35,9 @@ public class Particle   {
         
         //RANDOM for updating velocity
         Random r = new Random();
+        
+        //The velocity clamper that will clamp the velocity values
+        VelocityClamper vClamper = null;
 	
 	Particle(){
 		fitness = 10;
@@ -163,6 +167,15 @@ public class Particle   {
                         v[i] = newVelocity;
                 }
                 
+                //check whether velocitiy violations occur
+                if(vClamper == null){
+                        return;
+                }
+                
+                if(vClamper.violateVelocity(v)){
+                        v = vClamper.getClampedVelocity(v);
+                }
+                
         }
         
         
@@ -274,6 +287,14 @@ public class Particle   {
                         }
                         return false;
                 }
+        }
+        
+        /**
+         * Set the velocity clamper that will clamp velocities when they exceed the values
+         * @param theClamper : The velocity clamper that will clamp velocities
+         */
+        public void setVelocityClamper(VelocityClamper theClamper){
+                vClamper = theClamper;
         }
 	
 }

@@ -1,6 +1,6 @@
 package hhvvkk.psolite;
 
-
+import hhvvkk.velocityclamp.VelocityClamper;
 import java.util.Random;
 
 public class PSO {
@@ -29,7 +29,7 @@ public class PSO {
         
         //A random generator
 	Random r = new Random();
-	
+        
         /**
          * Create a particle swarm optimizer with a swarm already created
          * @param fFunciton : A fitness function to evaluate the fitness of particles
@@ -226,5 +226,19 @@ public class PSO {
          */
         public int getSwarmCount(){
                 return swarm.size();
+        }
+        
+        /**
+         * Sets the velocity clamper for each of the particles and throws error if it is not initialized
+         * @param theClamper : The selected velocity clamper that will clamp the velocities of the particles
+         */
+        public void setVelocityClamper(VelocityClamper theClamper) throws SwarmNotInitializedException{
+                if(!psoInitialized){
+                        throw new SwarmNotInitializedException("Swarm is not initialized when trying to set the velocity clamper");
+                }
+                
+                for(int i = 0; i < swarm.size(); i++){
+                        swarm.get(i).setVelocityClamper(theClamper);
+                }
         }
 }

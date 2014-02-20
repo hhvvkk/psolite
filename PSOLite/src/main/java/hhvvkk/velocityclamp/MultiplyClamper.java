@@ -2,12 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package VelocityClamp;
+package hhvvkk.velocityclamp;
+   
 
-public class NormalClamp extends VelocityClamper {
+public class MultiplyClamper extends VelocityClamper {
+        //the multiplier used in order to set the value 
+        private double reductionMultiplier = 0.9;
         
-        public NormalClamp(double []velocities){
+        public MultiplyClamper(double []velocities){
                 setMaxVelocities(velocities);
+        }
+        
+        public MultiplyClamper(double [] velocities, double multiplier){
+                setMaxVelocities(velocities);
+                reductionMultiplier = multiplier;
         }
         
         /**
@@ -21,9 +29,7 @@ public class NormalClamp extends VelocityClamper {
                 //clamp the current velocity
                 while(violateVelocity(currentVelocity)){
                         for(int i = 0; i < currentVelocity.length; i++){
-                                if(violateIndividual(i, currentVelocity[i])){
-                                        currentVelocity[i] = getMaxVelocityAt(i);
-                                }
+                                currentVelocity[i] = currentVelocity[i] * reductionMultiplier;
                         }
                 }
                 return currentVelocity;
