@@ -67,6 +67,24 @@ public class Particle   {
                 w = newInertia;
         }
         
+        
+        /**
+         * Sets the c1 value of this particle
+         * @param newC1Value : The new c1
+         */
+        public void setC1(double newC1Value){
+                c1 = newC1Value;
+        }
+        
+        /**
+         * Sets the c2 value of this particle
+         * @param newC2Value : The new c2
+         */
+        public void setC2(double newC2Value){
+                c2 = newC2Value;
+        }
+        
+        
         public double getW(){
                 return w;
         }
@@ -143,7 +161,7 @@ public class Particle   {
                         }
                         else{//if it has started check previous with next
                                 if(isBetterFitness(maximize, currentBest, neighbour.getPBest())){
-                                        System.out.println("Is better " + currentBest + "---" + neighbour.getPBest());
+                                        System.out.println("Is better cur=" + currentBest + "---neighbor=" + neighbour.getPBest());
                                         currentBest = neighbour.getPBest();
                                         neighbourhoodBestX = neighbour.getBestPosition();  
                                 }//else it is not better 
@@ -156,6 +174,7 @@ public class Particle   {
                 
                 //finally check if this particle is better(i.e. this is the best particle in the neighbourhood)
                 if(isBetterFitness(maximize, this.getPBest(), currentBest)){
+                        System.out.println("Is better this.pbest=" + this.getPBest() + "---currbest=" + currentBest);
                         neighbourhoodBestX = this.getBestPosition();   
                 }
                 

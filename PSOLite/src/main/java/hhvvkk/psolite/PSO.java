@@ -83,6 +83,36 @@ public class PSO {
 	}
         
         /**
+         * Sets the inertia weight of the particle(w value)
+         * @param newInnertiaWeight : The new inertia weight of the particles
+         */
+        public void setAllInnertiaWeight(double newInnertiaWeight){
+                for(int i = 0; i < swarm.size(); i++){
+                        swarm.get(i).setInertiaWeight(newInnertiaWeight);
+                }
+        }
+        
+        /**
+         * Sets the c1 value for all particles
+         * @param newC1Value : The new C1 value for all particles
+         */
+        public void setAllC1(double newC1Value){
+                for(int i = 0; i < swarm.size(); i++){
+                        swarm.get(i).setC1(newC1Value);
+                }
+        }
+        
+        /**
+         * Sets the c2 value for all particles
+         * @param newC2Value : The new C1 value for all particles
+         */
+        public void setAllC2(double newC2Value){
+                for(int i = 0; i < swarm.size(); i++){
+                        swarm.get(i).setC2(newC2Value);
+                }
+        }
+        
+        /**
          * Set the fitness function to the new fitness function
          * @param newFitnessFunction The new fitness function to use
          */
