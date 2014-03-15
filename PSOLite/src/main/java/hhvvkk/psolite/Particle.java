@@ -254,7 +254,7 @@ public class Particle   {
                 for(int i = 0; i < x.length; i++){
                         double r1 = 0.1+r.nextDouble()*0.8;
                         double r2 = 0.1+r.nextDouble()*0.8;
-                        double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]) + r2*c2*(neighbourhoodBestX[i] - x[i]);
+                        double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]) + r2*c2*(socialComponent[i] - x[i]);
                         v[i] = newVelocity;
                 }
         }

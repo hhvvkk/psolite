@@ -1,17 +1,37 @@
 
 package hhvvkk.updatestrategy;
 
+import hhvvkk.psolite.InvalidUpdateComponent;
 import hhvvkk.psolite.PSOSwarm;
 import hhvvkk.psolite.Particle;
+import hhvvkk.psolite.SwarmNullException;
 
 public abstract class UpdateTopology {
+        /**
+         * A function to call the update velocities
+         * @param swarm : The swarm that is used for the update process
+         * @param index : The particle index that will be updated
+         * @param maximize : An indicator showing whether function maximizes or minimizes
+         */
+        public void updateVelocity(PSOSwarm swarm, int index, boolean maximize) throws SwarmNullException{
+                if(swarm == null){
+                        throw new SwarmNullException("Swarm is null in attempt to update velocities in UpdateTopology");
+                }
+                
+                if(index >= swarm.size() || index < 0){
+                        throw new IndexOutOfBoundsException("Index is out of bounds in UpdateTopology");
+                }
+                
+                update(swarm, index, maximize);
+        }
+    
         /**
          * An abstract function to indicate the update of a particle velocity
          * @param swarm : The swarm that is used for the update process
          * @param index : The particle index that will be updated
          * @param maximize : An indicator showing whether function maximizes or minimizes
          */
-        public abstract void update(PSOSwarm swarm, int index, boolean maximize);
+        abstract void update(PSOSwarm swarm, int index, boolean maximize);
         
         /**
          * A function to determine whether the first fitness is better than the second
@@ -42,18 +62,10 @@ public abstract class UpdateTopology {
          * @param socialComponent : The social component to be used in updating the particle
          */
         protected void updateVelocity(Particle particle, double []socialComponent){
-                particle.updateVelocity(socialComponent);
-        }
-        
-        /**
-         * @note 
-         * OLD UPDATE:*
-                for(int i = 0; i < x.length; i++){
-                        double r1 = 0.1+r.nextDouble()*0.8;
-                        double r2 = 0.1+r.nextDouble()*0.8;
-                        double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]) + r2*c2*(neighbourhoodBestX[i] - x[i]);
-                        v[i] = newVelocity;
+                try{
+                        particle.updateVelocity(socialComponent);
+                }catch(InvalidUpdateComponent iUException){
+                        
                 }
-                
-         */
+        }
 }

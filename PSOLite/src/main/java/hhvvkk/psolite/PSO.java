@@ -1,7 +1,8 @@
 package hhvvkk.psolite;
 
-import hhvvkk.velocityclamp.VelocityClamper;
 import hhvvkk.updatestrategy.PSOVelocityUpdatePool;
+import hhvvkk.updatestrategy.PoolEmptyException;
+import hhvvkk.velocityclamp.VelocityClamper;
 import java.util.Random;
 
 public class PSO {
@@ -79,10 +80,10 @@ public class PSO {
         /**
          * A function to run the PSO until it has finished or found a solution
          */
-	public void runPSO(){
+	public void runPSO() throws SwarmNotInitializedException, SwarmEmptyException, PoolEmptyException{
 		//inside
                 while(!isEnd()){
-                    stepPSO();
+                        stepPSO();
                 }
 	}
         
@@ -131,14 +132,13 @@ public class PSO {
 	* A function to step the particle positions and evaluate them n amount of times
 	* @param amount : the amount of steps to be taken
 	*/
-	public void stepPSO(int amount){
+	public void stepPSO(int amount) throws PoolEmptyException, SwarmEmptyException, SwarmNotInitializedException{
                 //if amount <= 0 throw error
                 int stepCounter = 0;
                 
                 //inside
                 while(!isEnd() && stepCounter < amount){
-                    stepPSO();
-                    
+                    stepPSO();                    
                     stepCounter++;
                 }
 	}
@@ -147,10 +147,10 @@ public class PSO {
 	* A function to step the particle positions and evaluate their fitness and update velocity once
 	*
 	*/
-	public void stepPSO(){//throws...
+	public void stepPSO() throws SwarmNotInitializedException, SwarmEmptyException, PoolEmptyException{//throws...
                 //check if swarm is initialilsed
 		if(!psoIsIntialized()){
-			//throw error, must be initialized
+			throw new SwarmNotInitializedException("Swarm is not initialized when trying to step the PSO");
 		}
                 
                 for(int swarmCount = 0; swarmCount < swarm.size(); swarmCount++){
@@ -167,15 +167,9 @@ public class PSO {
                 }
                 
                 for(int swarmCount = 0; swarmCount < swarm.size(); swarmCount++){
-                        //update particle velocity
                         psoUpdatePool.updateVelocity(swarm, swarmCount, maximize);
                 }
 	}
-	
-	
-        void updateVelocity(Particle particle, int index){
-                
-        }
         
 	/**
 	* A function to step the particle positions and evaluate them once

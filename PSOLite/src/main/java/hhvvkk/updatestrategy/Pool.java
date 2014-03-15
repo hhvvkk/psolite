@@ -3,8 +3,8 @@ package hhvvkk.updatestrategy;
 
 import java.util.ArrayList;
 
-public class UpdatePool extends ArrayList<UpdateTopology>{
-        UpdatePool(){
+public class Pool extends ArrayList<UpdateTopology>{
+        Pool(){
                 
         }
         
@@ -15,6 +15,4 @@ public class UpdatePool extends ArrayList<UpdateTopology>{
                 
                 return super.get(index);
         }
-        
-        public void update()
 }

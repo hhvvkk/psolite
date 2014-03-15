@@ -13,7 +13,8 @@ public class StarUpdateTopology extends UpdateTopology {
          * @param index : The index used to find the particle to update
          * @param maximize : A boolean indicating if maximized or minimized
          */
-        public void update(PSOSwarm swarm, int index, boolean maximize){
+        protected void update(PSOSwarm swarm, int index, boolean maximize){
+                
                 //loop through all to find the global best
                 Particle gBest = swarm.get(0);
                 
@@ -27,6 +28,6 @@ public class StarUpdateTopology extends UpdateTopology {
                 }
                 
                 //then update
-                gBest.getBestPosition();
+                updateVelocity(swarm.get(index), gBest.getBestPosition());
         }
 }

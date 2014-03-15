@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class PSOVelocityUpdatePool {
     
-        private UpdatePool updatePool = null;
+        private Pool updatePool = null;
         
         /**
          * A random to choose the update strategy randomly from the pool
@@ -17,7 +17,7 @@ public class PSOVelocityUpdatePool {
         Random random = new Random();
         
         public PSOVelocityUpdatePool(){
-                updatePool = new UpdatePool();
+                updatePool = new Pool();
         }        
         
         /**
@@ -76,9 +76,9 @@ public class PSOVelocityUpdatePool {
          * @param index : The index of the particle to be updated
          * @param maximize : The indicator determining if function maximizes or minimizes
          */
-        public void updateVelocity(PSOSwarm swarm, int index, boolean maximize) throws SwarmEmptyException, UpdatePoolEmptyException {
+        public void updateVelocity(PSOSwarm swarm, int index, boolean maximize) throws SwarmEmptyException, PoolEmptyException {
                 if(updatePool.isEmpty()){
-                        throw new UpdatePoolEmptyException("Update pool is empty apon trying to update velocity");
+                        throw new PoolEmptyException("Update pool is empty apon trying to update velocity");
                 }
             
                 if(swarm == null){
