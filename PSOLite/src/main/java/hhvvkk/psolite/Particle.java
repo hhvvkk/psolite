@@ -119,84 +119,6 @@ public class Particle   {
 		return tempPosition;
 	}
         
-        /**
-         * Update velocity values using the swarm to find neighbors for values
-         * @param swarm : The 
-         */
-        public void updateVelocity(PSOSwarm swarm, boolean maximize){
-            
-                //find the best in the neighbourhood
-                double []neighbourhoodBestX = null;
-                
-                //if it does not find a neighbourhood(no neighbours) then just use normal update
-                if(neighborhood.isEmpty()){
-                    
-                        for(int i = 0; i < x.length; i++){
-                                double r1 = 0.1+r.nextDouble()*0.8;
-                                double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]);
-                                v[i] = newVelocity;
-                        }
-                        return;
-                }
-                
-                //create the value holding the neighbourhood best values
-                neighbourhoodBestX = new double[x.length];
-                
-                //a boolean indicating if the first value was set or not
-                boolean justStarted = true;
-                double currentBest = 0;
-                
-                
-                //find the best in the neighborhood
-                for(int i = 1; i < neighborhood.size(); i++){
-                        int neighbourIndex = neighborhood.get(i);
-                        
-                        Particle neighbour = swarm.get(neighbourIndex);
-                        
-                        if(justStarted == true){
-                                //need to set the first particle as the neighborhood best
-                                currentBest = neighbour.getPBest();
-                                neighbourhoodBestX = neighbour.getBestPosition();
-                                justStarted = false;
-                        }
-                        else{//if it has started check previous with next
-                                if(isBetterFitness(maximize, currentBest, neighbour.getPBest())){
-                                        System.out.println("Is better cur=" + currentBest + "---neighbor=" + neighbour.getPBest());
-                                        currentBest = neighbour.getPBest();
-                                        neighbourhoodBestX = neighbour.getBestPosition();  
-                                }//else it is not better 
-                                
-                        }
-                }
-                
-                if(neighbourhoodBestX == null)
-                        return;
-                
-                //finally check if this particle is better(i.e. this is the best particle in the neighbourhood)
-                if(isBetterFitness(maximize, this.getPBest(), currentBest)){
-                        System.out.println("Is better this.pbest=" + this.getPBest() + "---currbest=" + currentBest);
-                        neighbourhoodBestX = this.getBestPosition();   
-                }
-                
-                
-                for(int i = 0; i < x.length; i++){
-                        double r1 = 0.1+r.nextDouble()*0.8;
-                        double r2 = 0.1+r.nextDouble()*0.8;
-                        double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]) + r2*c2*(neighbourhoodBestX[i] - x[i]);
-                        v[i] = newVelocity;
-                }
-                
-                //check whether velocitiy violations occur
-                if(vClamper == null){
-                        return;
-                }
-                
-                if(vClamper.violateVelocity(v)){
-                        v = vClamper.getClampedVelocity(v);
-                }
-                
-        }
-        
         
         /**
          * Gets the best position the particle was in at a previous stage
@@ -314,6 +236,27 @@ public class Particle   {
          */
         public void setVelocityClamper(VelocityClamper theClamper){
                 vClamper = theClamper;
+        }
+        
+        /**
+         * Update the particle velocity using the social component
+         * @param socialComponent 
+         */
+        public void updateVelocity(double []socialComponent) throws InvalidUpdateComponent{
+                if(socialComponent == null){
+                        throw new InvalidUpdateComponent("Update velocity attempt on particle using empty social component");
+                }
+                if(socialComponent.length != x.length){
+                        throw new InvalidUpdateComponent("Update velocity attempt of Particle where the social component array size and x array size do not match in Particle");
+                }
+                
+                
+                for(int i = 0; i < x.length; i++){
+                        double r1 = 0.1+r.nextDouble()*0.8;
+                        double r2 = 0.1+r.nextDouble()*0.8;
+                        double newVelocity = w*v[i] + r1*c1*(xPbest[i] - x[i]) + r2*c2*(neighbourhoodBestX[i] - x[i]);
+                        v[i] = newVelocity;
+                }
         }
 	
 }

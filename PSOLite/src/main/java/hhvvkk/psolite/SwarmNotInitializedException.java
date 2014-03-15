@@ -9,11 +9,11 @@ package hhvvkk.psolite;
  * @author root
  */
 public class SwarmNotInitializedException extends Exception {
-        SwarmNotInitializedException(){
+        public SwarmNotInitializedException(){
                 super();
         }
         
-        SwarmNotInitializedException(String message){
+        public SwarmNotInitializedException(String message){
                 super(message);
         }
 }

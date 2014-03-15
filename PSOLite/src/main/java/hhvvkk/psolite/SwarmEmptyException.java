@@ -9,11 +9,11 @@ package hhvvkk.psolite;
  * @author root
  */
 public class SwarmEmptyException extends Exception {
-        SwarmEmptyException(){
+        public SwarmEmptyException(){
                 super();
         }
         
-        SwarmEmptyException(String message){
+        public SwarmEmptyException(String message){
                 super(message);
         }        
         

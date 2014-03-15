@@ -1,6 +1,7 @@
 package hhvvkk.psolite;
 
 import hhvvkk.velocityclamp.VelocityClamper;
+import hhvvkk.updatestrategy.PSOVelocityUpdatePool;
 import java.util.Random;
 
 public class PSO {
@@ -23,6 +24,9 @@ public class PSO {
 	
         //the fitnessfunction that will be used in evaluating the fitness of a particle
 	PSOFitnessFunction psoFitnessFunction = null;
+        
+        //The update function for velocity updates
+        PSOVelocityUpdatePool psoUpdatePool = null;
 	
 	//a boolean indicating whether it should be maximum or minimum obtained by fitness function
 	boolean maximize = true;
@@ -163,13 +167,16 @@ public class PSO {
                 }
                 
                 for(int swarmCount = 0; swarmCount < swarm.size(); swarmCount++){
-                        Particle particle = swarm.get(swarmCount);
                         //update particle velocity
-                        particle.updateVelocity(swarm, maximize);
+                        psoUpdatePool.updateVelocity(swarm, swarmCount, maximize);
                 }
 	}
 	
 	
+        void updateVelocity(Particle particle, int index){
+                
+        }
+        
 	/**
 	* A function to step the particle positions and evaluate them once
 	* @return Return true if the PSO is over maximum iteration or fitness obtained
