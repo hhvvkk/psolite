@@ -13,8 +13,9 @@ public class StarUpdateTopology extends UpdateTopology {
          * @param index : The index used to find the particle to update
          * @param maximize : A boolean indicating if maximized or minimized
          */
+        @Override
         protected void update(PSOSwarm swarm, int index, boolean maximize){
-                
+               
                 //loop through all to find the global best
                 Particle gBest = swarm.get(0);
                 

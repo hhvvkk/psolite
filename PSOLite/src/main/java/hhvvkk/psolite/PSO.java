@@ -93,7 +93,7 @@ public class PSO {
          */
         public void setAllInnertiaWeight(double newInnertiaWeight){
                 for(int i = 0; i < swarm.size(); i++){
-                        swarm.get(i).setInertiaWeight(newInnertiaWeight);
+                        swarm.get(i).setW(newInnertiaWeight);
                 }
         }
         

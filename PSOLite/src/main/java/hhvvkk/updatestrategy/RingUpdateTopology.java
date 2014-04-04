@@ -11,6 +11,7 @@ public class RingUpdateTopology extends UpdateTopology{
          * @param index : The index used to find the particle to update
          * @param maximize : A boolean indicating if maximized or minimized
          */
+        @Override
         protected void update(PSOSwarm swarm, int index, boolean maximize){
                 
                 int leftIndex, rightIndex = -1;
@@ -18,13 +19,13 @@ public class RingUpdateTopology extends UpdateTopology{
                 leftIndex = index -1;
                 
                 if(leftIndex < 0){
-                        
+                        leftIndex = swarm.size()-1;
                 }
                 
                 rightIndex = index +1;
                 
                 if(rightIndex >= swarm.size()){
-                        
+                        rightIndex = 0;
                 }
                 
                 Particle leftParticle = swarm.get(leftIndex);

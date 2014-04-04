@@ -1,13 +1,10 @@
 package hhvvkk.psolite;
 
 import hhvvkk.velocityclamp.VelocityClamper;
-import java.util.ArrayList;
 import java.util.Random;
 
 
 public class Particle   {
-        
-	private ArrayList<Integer>neighborhood = new ArrayList<Integer>();
         
         //INNERTIA WEIGHT
         double w = 0.72;
@@ -42,31 +39,6 @@ public class Particle   {
 	Particle(){
 		fitness = 10;
 	}
-	
-        /**
-         * Adds a neighbor to this particle's neighborhood using the index supplied
-         * @param newNeighbourIndex : The new neighbor index to add to this particle neighborhood
-         */
-        public void addNeighbour(int newNeighbourIndex) throws IndexOutOfBoundsException{
-                if(newNeighbourIndex < 0){
-                        throw new IndexOutOfBoundsException("Adding a particle index must be within bounds ("+Integer.toString(newNeighbourIndex) +"");
-                }
-                
-                //simply do not add something twice
-                if(neighborhood.contains(newNeighbourIndex))
-                        return;
-                
-                neighborhood.add(newNeighbourIndex);
-        }
-        
-        /**
-         * Sets the inertia weight to the selected value
-         * @param newInertia : The new inertia weight
-         */
-        public void setInertiaWeight(double newInertia){
-                w = newInertia;
-        }
-        
         
         /**
          * Sets the c1 value of this particle
@@ -75,6 +47,16 @@ public class Particle   {
         public void setC1(double newC1Value){
                 c1 = newC1Value;
         }
+        
+        
+        /**
+         * Gets the C1 value of the particle
+         * @return Return the current C1 value for this particle
+         */
+        public double getC1(){
+                return c1;
+        }
+        
         
         /**
          * Sets the c2 value of this particle
@@ -85,16 +67,28 @@ public class Particle   {
         }
         
         
+        /**
+         * Gets the C2 value of the particle
+         * @return Return the current C2 value for this particle
+         */
+        public double getC2(){
+                return c2;
+        }
+        
+        
+        /**
+         * Gets the W(Innertia Weight) value of the particle
+         * @return Return the current W value for this particle
+         */
         public double getW(){
                 return w;
         }
-        
         /**
-         * Removes a particle from the neighborhood
-         * @param particleIndex : A particle index to be removed
+         * Sets the new value for W(Innertia Weight) in the particle
+         * @param newWValue : The new value for the particle
          */
-        public void removeNeighbour(int particleIndex){
-                neighborhood.remove(particleIndex);
+        public void setW(double newWValue){
+                w = newWValue;
         }
         
         /**
@@ -102,7 +96,12 @@ public class Particle   {
          * @param xVal : The position values
          * @param vVal : The velocity values
          */
-	public void setData(double [] xVal, double [] vVal){
+	public void setData(double [] xVal, double [] vVal) throws NullPointerException{
+                
+                if(xVal == null || vVal == null){
+                        throw new NullPointerException("Either the X values(position of particle) or V values(velocity of the particle) is null when trying to set it.");
+                }
+                
 		x = xVal;
 		v = vVal;
 	}
@@ -249,7 +248,6 @@ public class Particle   {
                 if(socialComponent.length != x.length){
                         throw new InvalidUpdateComponent("Update velocity attempt of Particle where the social component array size and x array size do not match in Particle");
                 }
-                
                 
                 for(int i = 0; i < x.length; i++){
                         double r1 = 0.1+r.nextDouble()*0.8;

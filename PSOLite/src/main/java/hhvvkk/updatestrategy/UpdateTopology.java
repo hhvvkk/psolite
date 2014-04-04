@@ -1,10 +1,7 @@
 
 package hhvvkk.updatestrategy;
 
-import hhvvkk.psolite.InvalidUpdateComponent;
-import hhvvkk.psolite.PSOSwarm;
-import hhvvkk.psolite.Particle;
-import hhvvkk.psolite.SwarmNullException;
+import hhvvkk.psolite.*;
 
 public abstract class UpdateTopology {
         /**
@@ -13,9 +10,13 @@ public abstract class UpdateTopology {
          * @param index : The particle index that will be updated
          * @param maximize : An indicator showing whether function maximizes or minimizes
          */
-        public void updateVelocity(PSOSwarm swarm, int index, boolean maximize) throws SwarmNullException{
+        public void updateVelocity(PSOSwarm swarm, int index, boolean maximize) throws SwarmNullException, SwarmEmptyException{
                 if(swarm == null){
                         throw new SwarmNullException("Swarm is null in attempt to update velocities in UpdateTopology");
+                }
+                
+                if(swarm.isEmpty()){
+                        throw new SwarmEmptyException("Swarm is empty in trying to update particle velocity");
                 }
                 
                 if(index >= swarm.size() || index < 0){
@@ -31,7 +32,7 @@ public abstract class UpdateTopology {
          * @param index : The particle index that will be updated
          * @param maximize : An indicator showing whether function maximizes or minimizes
          */
-        abstract void update(PSOSwarm swarm, int index, boolean maximize);
+        abstract protected void update(PSOSwarm swarm, int index, boolean maximize);
         
         /**
          * A function to determine whether the first fitness is better than the second
